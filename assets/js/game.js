@@ -110,11 +110,12 @@ var fight = function(enemy) {
         // if yes, take them to the store() function
             if (storeConfirm) {
              shop();
+            }
                 // leave while() loop since enemy is dead
              break;
              } else {
       window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
-    };
+    }
 
     // remove players's health by subtracting the amount set in the enemyAttack variable
     var damage = randomNumber(enemy.attack - 3, enemy.attack);
