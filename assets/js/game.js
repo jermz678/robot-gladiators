@@ -56,58 +56,65 @@ var endGame = function() {
     window.alert('Thank you for playing Battlebots! Come back soon!');
   }
 };
+var fightOrSkip = function() {
+    // ask player if they'd like to fight or skip using fightOrSkip function
+    var promptFight = window.prompt('Would you like FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+  // Conditional Recursive Function Call
+    if (promptFight === "" || promptFight === null) {
+    window.alert("You need to provide a valid answer! Please try again.");
+    return fightOrSkip();
+    }
+  
+    // if player picks "skip" confirm and then stop the loop
+    promptFight = promptFight.toLowerCase();
+    if (promptFight === "skip") {
+      // confirm player wants to skip
+      var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+  
+      // if yes (true), leave fight
+    if (confirmSkip) {
+        window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+        // subtract money from playerMoney for skipping, but don't let them go into the negative
+        playerInfo.money = Math.max(0, playerInfo.money - 10);
+  
+        // return true if player wants to leave
+        return true;
+      }
+    }
+  };
 
 // fight function (now with parameter for enemy's name)
 var fight = function(enemy) {
     console.log(enemy);
-  while (playerInfo.health > 0 && enemy.health > 0) {
-    // ask player if they'd like to fight or run
-    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
-
-    // if player picks "skip" confirm and then stop the loop
-    if (promptFight === 'skip' || promptFight === 'SKIP') {
-      // confirm player wants to skip
-      var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-
-      // if yes (true), leave fight
-      if (confirmSkip) {
-        window.alert(playerInfo.name + ' has decided to skip this fight. Goodbye!');
-        // subtract money from playerMoney for skipping
-        playerInfo.money =  Math.max(0, playerMoney - 10);
-        shop();
-        break;
-      }
-    }
-
-    // remove enemy's health by subtracting the amount set in the playerAttack variable
-    // generate random damage value based on player's attack power
-var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-
-enemy.health = Math.max(0, enemy.health - damage);
+    while (playerInfo.health > 0 && enemy.health > 0) {
+        // ask player if they'd like to fight or skip using fightOrSkip function
+        if (fightOrSkip()) {
+          // if true, leave fight by breaking loop
+          break;
+        }
+    enemy.health = Math.max(0, enemy.health - damage);
     console.log(
       playerInfo.name + ' attacked ' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + ' health remaining.'
     );
 
     // check enemy's health
     if (enemy.health <= 0) {
-      window.alert(enemy.name + ' has died!');
+        window.alert(enemy.name + ' has died!');
 
-      // award player money for winning
-      playerInfo.money = playerInfo.money + 20;
+         // award player money for winning
+        playerInfo.money = playerInfo.money + 20;
 
-      // ask if player wants to use the store before next round
-      var storeConfirm = window.confirm('The fight is over, visit the store before the next round?');
+        // ask if player wants to use the store before next round
+         var storeConfirm = window.confirm('The fight is over, visit the store before the next round?');
 
-      // if yes, take them to the store() function
-      if (storeConfirm) {
-        shop();
-      }
-
-      // leave while() loop since enemy is dead
-      break;
-    } else {
+        // if yes, take them to the store() function
+            if (storeConfirm) {
+             shop();
+                // leave while() loop since enemy is dead
+             break;
+             } else {
       window.alert(enemy.name + ' still has ' + enemy.health + ' health left.');
-    }
+    };
 
     // remove players's health by subtracting the amount set in the enemyAttack variable
     var damage = randomNumber(enemy.attack - 3, enemy.attack);
@@ -131,13 +138,13 @@ enemy.health = Math.max(0, enemy.health - damage);
 // go to shop between battles function
 var shop = function() {
   // ask player what they'd like to do
-  var shopOptionPrompt = window.prompt(
-    'Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one "REFILL", "UPGRADE", or "LEAVE" to make a choice.'
-  );
+    var shopOptionPrompt = window.prompt(
+        'Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one "REFILL", "UPGRADE", or "LEAVE" to make a choice.'
+     );
 
   // use switch case to carry out action
-  switch (shopOptionPrompt) {
-    case "REFILL":
+     switch (shopOptionPrompt) {
+        case "REFILL":
         case "refill":
           playerInfo.refillHealth();
           break;
